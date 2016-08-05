@@ -5,4 +5,4 @@ class ExpandedUrlForm(forms.ModelForm):
 
     class Meta:
         model = ExpandedUrl
-        fields = ('short_url',)
+        fields = ('origin',)

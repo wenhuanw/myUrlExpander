@@ -2,6 +2,7 @@ from .models import ExpandedUrl
 from .forms import ExpandedUrlForm
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
+import lxml
 from lxml.html import fromstring
 from django.conf import settings
 from django.contrib.auth.decorators import login_required

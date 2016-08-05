@@ -18,7 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('urlexpander.urls')),
+    url(r'', include('myurlex.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/djangourl'}),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/url/create'}),
 ]

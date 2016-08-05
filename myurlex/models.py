@@ -1,4 +1,5 @@
 from django.db import models
+import lxml
 from lxml.html import fromstring
 import requests
 
@@ -6,7 +7,7 @@ import requests
 # Create your models here.
 class ExpandedUrl(models.Model):
     destination = models.URLField(default='')
-    origin = models.URLField(default='')
+    origin = models.URLField(default='http://')
     status = models.IntegerField(default=0)
     title = models.CharField(max_length=150)
 

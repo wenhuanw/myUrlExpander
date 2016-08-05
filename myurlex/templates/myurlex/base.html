@@ -1,5 +1,6 @@
 
-load staticfiles %}
+{% load staticfiles %}
+
 <html>
 <head>
     <title>URL Expander</title>
@@ -7,7 +8,7 @@ load staticfiles %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{% static "css/main.css" %}">
+    <link rel="stylesheet" href="{% static "css/url.css" %}">
 </head>
 <body>
 <div class="page-header">
@@ -16,14 +17,14 @@ load staticfiles %}
             <span class="glyphicon glyphicon-plus"></span>
         </a>
         <p class="top-menu">
-            Hello {{ user.username }}<small>(<a href="{% url "django.contrib.auth.views.logout" %}">Log out</a>)</small>
+            <small><a href="{% url "django.contrib.auth.views.logout" %}">Log out</a></small>
         </p>
         {% else %}
         <a href="{% url "django.contrib.auth.views.login" %}" class="top-menu">
             <span class="glyphicon glyphicon-lock"></span>
         </a>
         {% endif %}
-    <h1><a href="{% url "url_list" %}">URL List</a></h1>
+    <h1>URL Expander</h1>
 </div>
 <div class="content container">
     <div class="row">

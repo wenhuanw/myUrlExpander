@@ -1,6 +1,5 @@
 h1 a {
     color: white;
-    font-family: 'Lobster';
 }
 
 
@@ -20,9 +19,7 @@ h1 a {
     margin-left: 40px;
 }
 
-h1, h2, h3, h4 {
-    font-family: 'Lobster', cursive;
-}
+
 
 .date {
     float: right;
@@ -38,7 +35,7 @@ h1, h2, h3, h4 {
 }
 
 .top-menu, .top-menu:hover, .top-menu:visited {
-    color: #blue;
+    color: white;
     float: right;
     font-size: 26pt;
     margin-right: 20px;

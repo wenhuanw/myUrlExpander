@@ -1,1 +1,7 @@
 settings.py
+*.pyc
+__pycache__
+<virtualenvname>
+mydb
+/static
+.DS_Store
