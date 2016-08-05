@@ -1,27 +1,25 @@
-
 from django.db import models
-import lxml
 from lxml.html import fromstring
 import requests
 
 
 # Create your models here.
-class expandedurl(models.Model):
-    destination_url = models.URLField(default='')
-    short_url = models.URLField(default='http://')
-    http_status_code = models.IntegerField(default=0)
-    page_title = models.CharField(max_length=100)
+class ExpandedUrl(models.Model):
+    destination = models.URLField(default='')
+    origin = models.URLField(default='')
+    status = models.IntegerField(default=0)
+    title = models.CharField(max_length=150)
 
     def publish(self):
-        if str(self.short_url).startswith('http://'):
-            response = requests.get(self.short_url)
+        if str(self.origin).startswith('http://'):
+            response = requests.get(self.origin)
         else:
-            response = requests.get('http://' + self.short_url)
-        self.destination_url = response.url
-        self.http_status_code = response.status_code
+            response = requests.get('http://' + self.origin)
+        self.destination = response.url
+        self.status = response.status
         siteTree = fromstring(response.content)
-        self.page_title = siteTree.findtext('.//title')
+        self.title = siteTree.findtext('.//title')
         self.save()
 
     def __str__(self):
-        return self.page_title
+        return self.title
