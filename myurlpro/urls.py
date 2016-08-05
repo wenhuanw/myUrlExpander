@@ -20,5 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('myurlex.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/url/create'}),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': 'django.contrib.auth.views.login'}),
 ]
