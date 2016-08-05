@@ -1,7 +1,7 @@
 settings.py
 *.pyc
 __pycache__
-<virtualenvname>
+myvenv3
 mydb
 /static
 .DS_Store
