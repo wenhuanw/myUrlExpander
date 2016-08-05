@@ -1,0 +1,17 @@
+
+{% extends "myurlex/base.html" %}
+
+    {% block content %}
+    <h1>Your URL List</h1>
+    {% for expandedurl in expandedurls %}
+    <div class="post">
+        <h1><a href="{% url "url_detail" pk=expandedurl.pk %}">{{ expandedurl.title }}</a></h1>
+        <p>destination url: {{ expandedurl.destination }}</p>
+        <p>short url: {{ expandedurl.originl}}</p>
+        <p>http_status_code: {{ expandedurl.status }}</p>
+    </div>
+    {% endfor %}
+    {% endblock content %}
+
+
+

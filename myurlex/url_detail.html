@@ -1,0 +1,12 @@
+{% extends "myurlex/base.html" %}
+
+{% block content %}
+<div class="post">
+    <a class="btn btn-default" href="{% url "url_edit" pk=expandedurl.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+    <a class="btn btn-default" href="{% url "url_remove" pk=expandedurl.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+    <h1>{{ expandedurl.title }}</h1>
+    <p>{{ expandedurl.destination }}</p>
+    <p>{{ expandedurl.origin }}</p>
+    <p>{{ expandedurl.status }}</p>
+</div>
+{% endblock %}
