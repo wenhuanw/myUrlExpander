@@ -1,0 +1,10 @@
+#!/home/ubuntu/djangourl/myvenv3/bin/python3
+# EASY-INSTALL-ENTRY-SCRIPT: 'mod-wsgi==4.5.3','console_scripts','mod_wsgi-express'
+__requires__ = 'mod-wsgi==4.5.3'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('mod-wsgi==4.5.3', 'console_scripts', 'mod_wsgi-express')()
+    )
