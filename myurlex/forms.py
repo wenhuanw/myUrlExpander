@@ -5,4 +5,4 @@ class ExpandedUrlForm(forms.ModelForm):
 
     class Meta:
         model = ExpandedUrl
-        fields = ('origin',)
+        fields = ('origin','timestamp',)

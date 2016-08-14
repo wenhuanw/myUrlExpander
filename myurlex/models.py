@@ -2,7 +2,7 @@ from django.db import models
 import lxml
 from lxml.html import fromstring
 import requests
-
+from .myservice import get_url
 
 # Create your models here.
 class ExpandedUrl(models.Model):
@@ -10,6 +10,8 @@ class ExpandedUrl(models.Model):
     origin = models.URLField(default='http://')
     status = models.IntegerField(default=0)
     title = models.CharField(max_length=150)
+    waybackUrl = models.URLField(default='')
+    timestamp = models.CharField(max_length=50,default='')
 
     def publish(self):
         if str(self.origin).startswith('http://'):

@@ -9,6 +9,8 @@
         <p>destination url: {{ expandedurl.destination }}</p>
         <p>short url: {{ expandedurl.originl}}</p>
         <p>http_status_code: {{ expandedurl.status }}</p>
+	<p>wayback url: {{expandedurl.waybackUrl }}</p>
+	<p>timestamp: {{expandedurl.timestamp }}</p>
     </div>
     {% endfor %}
     {% endblock content %}
