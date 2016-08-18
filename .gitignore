@@ -5,3 +5,6 @@ myvenv3
 mydb
 /static
 .DS_Store
+myservice.py
+test.py
+
