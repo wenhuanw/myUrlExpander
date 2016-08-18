@@ -12,6 +12,8 @@ class ExpandedUrl(models.Model):
     title = models.CharField(max_length=150)
     waybackUrl = models.URLField(default='')
     timestamp = models.CharField(max_length=50,default='')
+    imageUrl = models.URLField(default='')
+    imageId = models.IntegerField(default=0)
 
     def publish(self):
         if str(self.origin).startswith('http://'):

@@ -7,10 +7,12 @@
     <div class="post">
         <h1><a href="{% url "url_detail" pk=expandedurl.pk %}">{{ expandedurl.title }}</a></h1>
         <p>destination url: {{ expandedurl.destination }}</p>
-        <p>short url: {{ expandedurl.originl}}</p>
+        <p>short url: {{ expandedurl.origin}}</p>
         <p>http_status_code: {{ expandedurl.status }}</p>
 	<p>wayback url: {{expandedurl.waybackUrl }}</p>
 	<p>timestamp: {{expandedurl.timestamp }}</p>
+        <p>imageUrl:{{expandedurl.imageUrl}}</p>
+        <p>imageId:{{expandedurl.imageId}}</p>
     </div>
     {% endfor %}
     {% endblock content %}
