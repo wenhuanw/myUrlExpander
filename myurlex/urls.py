@@ -7,7 +7,8 @@ urlpatterns = [
     url(r'^api/create/$',views.url_create_api,name='url_create_api'),
     url(r'^api/list/$', views.url_list_api, name='url_list_api'),
     url(r'^api/edit/(?P<pk>[0-9]+)/$', views.url_edit_api, name='url_edit_api'),
-
+    url(r'^api/recapture/(?P<pk>[0-9]+)/$', views.url_recapture_api, name='url_recapture_api'),
+   
     url(r'^url/list/$', views.url_list, name='url_list'),
     url(r'^url/(?P<pk>[0-9]+)/$', views.url_detail, name='url_detail'),
     url(r'^url/create/$', views.url_create, name='url_create'),

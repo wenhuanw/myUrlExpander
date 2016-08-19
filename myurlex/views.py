@@ -14,8 +14,14 @@ from rest_framework.response import Response
 from myurlex.serializers import UrlSerializer
 from .myservice import get_url,upload_image,delete_image,get_id
 from django.utils import timezone
-import pdb
+#import pdb
+import json
 from ratelimit.decorators import ratelimit
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.decorators import authentication_classes
+from django.forms.models import model_to_dict
+from django.contrib.auth import authenticate
+
 # Create your views here.
 
 @ratelimit(key='ip', rate='10/m', block=True)
@@ -25,13 +31,22 @@ def url_list(request):
     return render(request, 'myurlex/url_list.html', {'expandedurls': expandedUrls})
 
 @ratelimit(key='ip', rate='10/m', block=True)
+#@authentication_classes((BasicAuthentication))
 @api_view(['GET'])
-@login_required(login_url='')
 def url_list_api(request):
-    if request.method == "GET":
-        expandedUrls = ExpandedUrl.objects.all()
-        serializer = UrlSerializer(expandedUrls, many = True)
-        return Response(serializer.data)
+   # pdb.set_trace()
+   # print (request.user)
+   # print (request.META)
+    username = request.META.get('HTTP_USERNAME')
+    password = request.META.get('HTTP_PASSWORD')
+    user = authenticate(username=username, password=password)
+    if user is not None:
+       if request.method == "GET":
+          expandedUrls = ExpandedUrl.objects.all()
+          serializer = UrlSerializer(expandedUrls, many = True)
+          return Response(serializer.data)
+   
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 @ratelimit(key='ip', rate='10/m', block=True)
@@ -96,16 +111,18 @@ def url_create(request):
 
 @ratelimit(key='ip', rate='10/m', block=True)
 @api_view(['POST'])
-@login_required(login_url='')
 def url_create_api(request):
-   # pdb.set_trace()
-    if request.method == "POST":
-        serializer = UrlSerializer(data=request.data)         
-        if serializer.is_valid():             
-            serializer.save()             
-            return Response(serializer.data, status=status.HTTP_201_CREATED)         
+    username = request.META.get('HTTP_USERNAME')
+    password = request.META.get('HTTP_PASSWORD')
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if request.method == "POST":
+           serializer = UrlSerializer(data=request.data)         
+           if serializer.is_valid():             
+              serializer.save()             
+              return Response(serializer.data, status=status.HTTP_201_CREATED)         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='')
@@ -143,31 +160,64 @@ def url_edit(request, pk):
 
 @ratelimit(key='ip', rate='10/m', block=True)
 @api_view(['GET','PUT','DELETE'])
-@login_required(login_url='')
 def url_edit_api(request, pk, format=None):
-    try:
-        url = ExpandedUrl.objects.get(pk=pk)
-    except url.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    username = request.META.get('HTTP_USERNAME')
+    password = request.META.get('HTTP_PASSWORD')
+    user = authenticate(username=username, password=password)
+    if user is not None:
+       try:
+          url = ExpandedUrl.objects.get(pk=pk)
+       except url.DoesNotExist:
+          return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':         
-        serializer = UrlSerializer(url)         
-        return Response(serializer.data)
+       if request.method == 'GET':         
+          serializer = UrlSerializer(url)         
+          return Response(serializer.data)
 
-    elif request.method == 'PUT':         
-        serializer = UrlSerializer(user, data=request.data)         
-        if serializer.is_valid():             
-            serializer.save()             
-            return Response(serializer.data)         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+       elif request.method == 'PUT':         
+          serializer = UrlSerializer(url, data=request.data)         
+          if serializer.is_valid():             
+             serializer.save()             
+             return Response(serializer.data)         
+          return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    elif request.method == 'DELETE':
-        if (url.imageId is not 0):
-            delete_image(url.imageId)         
-        url.delete()         
-        return Response(status=status.HTTP_204_NO_CONTENT)
+       elif request.method == 'DELETE':
+          if (url.imageId is not 0):
+             delete_image(url.imageId)         
+          url.delete()         
+          return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+
+@ratelimit(key='ip', rate='10/m', block=True)
+@api_view(['PUT'])
+def url_recapture_api(request, pk, format = None):
+    username = request.META.get('HTTP_USERNAME')
+    password = request.META.get('HTTP_PASSWORD')
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        try:
+            url = ExpandedUrl.objects.get(pk=pk)
+        except url.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if request.method == 'PUT':
+            if (url.imageId is not 0):
+                delete_image(url.imageId)
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            url.timestamp = body['timestamp']
+            url.waybackUrl = get_url(url.origin, url.timestamp)
+            if url.waybackUrl is not None:
+                url.imageId = get_id(url.waybackUrl)
+                upload_image(url.waybackUrl,url.imageId)
+                serializer = UrlSerializer(url,data = model_to_dict(url))
+                if serializer.is_valid():
+                
+                    serializer.save()
+                    return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='')
